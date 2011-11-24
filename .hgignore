@@ -1,0 +1,10 @@
+syntax: glob
+bin/**
+obj/**
+*.suo
+*.swp
+*.user
+*.trx
+TestResults/**
+*.docstates
+_ReSharper.OpenIso8583Net/**
