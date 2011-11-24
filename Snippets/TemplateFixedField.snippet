@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <Title>Variable Field Snippet</Title>
+    <Author>John Oxley</Author>
+    <Shortcut>tff</Shortcut>
+    <Description>Create a new templated fixed field</Description>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+    </SnippetTypes>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal>
+        <ID>field</ID>
+        <Default>0</Default>
+      </Literal>
+      <Literal>
+        <ID>type</ID>
+        <Default>N</Default>
+      </Literal>
+      <Literal>
+        <ID>length</ID>
+      </Literal>
+    </Declarations>
+    <Code Language="CSharp">
+      <![CDATA[Template[Bit.$field$] = FieldDescriptor.AsciiFixed($length$, FieldValidators.$type$);$end$]]>
+    </Code>
+  </Snippet>
+</CodeSnippet>

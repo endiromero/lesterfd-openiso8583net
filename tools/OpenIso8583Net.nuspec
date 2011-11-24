@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+	<metadata>
+		<id>OpenIso8583.Net</id>
+		<version>0.3.0</version>
+		<authors>John Oxley</authors>
+		<owners>John Oxley</owners>
+		<projectUrl>https://code.google.com/p/openiso8583net/</projectUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>ISO 8583 Message Builder</description>
+	</metadata>
+	<files>
+		<file src="bin\Release\*.dll" target="lib" />
+		<file src="bin\Release\*.pdb" target="lib" />
+		<file src="bin\Release\*.xml" target="lib" />
+	</files>
+</package>

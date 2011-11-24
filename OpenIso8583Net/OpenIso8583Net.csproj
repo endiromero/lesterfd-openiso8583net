@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9CAEB159-4EEA-43FD-9507-40B53CE72DA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OpenIso8583Net</RootNamespace>
+    <AssemblyName>OpenIso8583Net</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\OpenIso8583Net.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\OpenIso8583Net.XML</DocumentationFile>
+    <PostBuildEvent>
+		nuget pack -BasePath "$(SolutionDir)OpenIso8583Net" -OutputDirector "$(SolutionDir)OpenIso8583Net\bin\Release" "$(SolutionDir)tools\OpenIso8583Net.nuspec"
+    </PostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdditionalAmount.cs" />
+    <Compile Include="Exceptions\FieldDescriptorException.cs" />
+    <Compile Include="Field.cs" />
+    <Compile Include="AMessage.cs" />
+    <Compile Include="Bitmap.cs" />
+    <Compile Include="Crypto\Iso0PinBlockFormatter.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Exceptions\FieldFormatException.cs" />
+    <Compile Include="Exceptions\FieldLengthException.cs" />
+    <Compile Include="Exceptions\FormatException.cs" />
+    <Compile Include="Exceptions\UnknownFieldException.cs" />
+    <Compile Include="FieldDescriptor.cs" />
+    <Compile Include="Formatter\AsciiFormatter.cs" />
+    <Compile Include="Formatter\BcdFormatter.cs" />
+    <Compile Include="Formatter\BinaryFormatter.cs" />
+    <Compile Include="Formatter\Formatters.cs" />
+    <Compile Include="Formatter\IFormatter.cs" />
+    <Compile Include="FieldValidator\AlphaFieldValidator.cs" />
+    <Compile Include="FieldValidator\AlphaNumericFieldValidator.cs" />
+    <Compile Include="FieldValidator\AlphaNumericPrintableFieldValidator.cs" />
+    <Compile Include="FieldValidator\AlphaNumericSpecialFieldValidator.cs" />
+    <Compile Include="FieldValidator\FieldValidators.cs" />
+    <Compile Include="FieldValidator\HexFieldValidator.cs" />
+    <Compile Include="FieldValidator\IFieldValidator.cs" />
+    <Compile Include="FieldValidator\NoneFieldValidator.cs" />
+    <Compile Include="FieldValidator\NumericFieldValidator.cs" />
+    <Compile Include="FieldValidator\Rev87AmountFieldValidator.cs" />
+    <Compile Include="FieldValidator\Track2FieldValidator.cs" />
+    <Compile Include="HashtableMessage.cs" />
+    <Compile Include="IField.cs" />
+    <Compile Include="LengthFormatters\FixedLengthFormatter.cs" />
+    <Compile Include="LengthFormatters\ILengthFormatter.cs" />
+    <Compile Include="IMessage.cs" />
+    <Compile Include="Iso8583.cs" />
+    <Compile Include="Iso8583Rev93.cs" />
+    <Compile Include="IsoConvert.cs" />
+    <Compile Include="LengthFormatters\VariableLengthFormatter.cs" />
+    <Compile Include="LengthValidators\FixedLengthValidator.cs" />
+    <Compile Include="LengthValidators\ILengthValidator.cs" />
+    <Compile Include="LengthValidators\VariableLengthValidator.cs" />
+    <Compile Include="NetworkHeaders\INetworkHeader.cs" />
+    <Compile Include="NetworkHeaders\TwoByteHeader.cs" />
+    <Compile Include="ProcessingCode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Template.cs" />
+    <Compile Include="TransmissionDateTime.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Validators.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+  <Import Project="$(SolutionDir)Version.proj" />
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks" />
+  <Target Name="BeforeBuild">
+    <SvnVersion LocalPath="$(MSBuildProjectDirectory)">
+      <Output TaskParameter="Revision" PropertyName="Revision" />
+    </SvnVersion>
+    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="OpenIso8583.Net" AssemblyDescription="ISO8583 Message Builder" AssemblyConfiguration="" AssemblyCompany="John Oxley" AssemblyProduct="OpenIso8583.Net" AssemblyCopyright="Copyright © John Oxley 2011" AssemblyTrademark="" AssemblyCulture="" ComVisible="false" Guid="dad698b7-4ada-4f02-8446-12fe960fa2e1" AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" Condition="$(Revision) != '0' " />
+    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateElement" File="$(SolutionDir)tools\OpenIso8583Net.nuspec" XPath="/package/metadata/version" InnerText="$(Major).$(Minor).$(Build)" />
+	<Message Text="Version $(Major).$(Minor).$(Build)" />
+  </Target>
+</Project>

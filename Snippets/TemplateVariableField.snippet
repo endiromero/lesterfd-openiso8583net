@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <Title>Variable Field Snippet</Title>
+    <Author>John Oxley</Author>
+    <Shortcut>tvf</Shortcut>
+    <Description>Create a new Variable Field</Description>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+    </SnippetTypes>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal>
+        <ID>field</ID>
+        <Default>0</Default>
+      </Literal>
+      <Literal>
+        <ID>type</ID>
+        <Default>Ans</Default>
+      </Literal>
+      <Literal>
+        <ID>lengthIndicator</ID>
+      </Literal>
+      <Literal>
+        <ID>maxLength</ID>
+      </Literal>
+    </Declarations>
+    <Code Language="CSharp">
+      <![CDATA[Template[Bit.$field$] = FieldDescriptor.AsciiVar($lengthIndicator$, $maxLength$, FieldValidators.$type$);$end$]]>
+    </Code>
+  </Snippet>
+</CodeSnippet>

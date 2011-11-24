@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <Title>FixedField</Title>
+    <Author>John Oxley</Author>
+    <Shortcut>ff</Shortcut>
+    <Description>Create a new Fixed Field</Description>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+    </SnippetTypes>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal>
+        <ID>field</ID>
+        <Default>0</Default>
+      </Literal>
+      <Literal>
+        <ID>type</ID>
+      </Literal>
+      <Literal>
+        <ID>length</ID>
+      </Literal>
+    </Declarations>
+    <Code Language="CSharp">
+      <![CDATA[case Bit._$field$:return Field.AsciiFixed(Bit._$field$, $length$, FieldValidators.$type$);$end$]]>
+    </Code>
+  </Snippet>
+</CodeSnippet>

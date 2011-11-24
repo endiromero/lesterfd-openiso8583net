@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <Title>Public Const Snippet</Title>
+    <Author>John Oxley</Author>
+    <Shortcut>pc</Shortcut>
+    <Description>Create a public const </Description>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+    </SnippetTypes>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal>
+        <ID>type</ID>
+        <Default>int</Default>
+      </Literal>
+      <Literal>
+        <ID>number</ID>
+      </Literal>
+      <Literal>
+        <ID>description</ID>
+      </Literal>
+    </Declarations>
+    <Code Language="CSharp">
+      <![CDATA[public const $type$ _$number$_$description$ = 0x$number$;$end$]]>
+    </Code>
+  </Snippet>
+</CodeSnippet>
