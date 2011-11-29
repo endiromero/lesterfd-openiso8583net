@@ -8,7 +8,7 @@ namespace OpenIso8583Net
     /// <summary>
     ///   A Template describing a message
     /// </summary>
-    public class Template : Dictionary<int, FieldDescriptor>
+    public class Template : Dictionary<int, IFieldDescriptor>
     {
         /// <summary>
         ///   Create a new instance of the Template class

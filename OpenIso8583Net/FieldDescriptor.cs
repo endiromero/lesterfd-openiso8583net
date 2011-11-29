@@ -10,7 +10,7 @@ namespace OpenIso8583Net
     /// <summary>
     ///   A class describing a field
     /// </summary>
-    public class FieldDescriptor
+    public class FieldDescriptor : IFieldDescriptor
     {
         /// <summary>
         ///   Describe a field
@@ -45,24 +45,24 @@ namespace OpenIso8583Net
         /// <summary>
         ///   The length formatter describing the field
         /// </summary>
-        public ILengthFormatter LengthFormatter { get; private set; }
+        public virtual ILengthFormatter LengthFormatter { get; private set; }
 
         /// <summary>
         ///   The validator describing the field
         /// </summary>
-        public IFieldValidator Validator { get; private set; }
+        public virtual IFieldValidator Validator { get; private set; }
 
         /// <summary>
         ///   The field formatter describing the field
         /// </summary>
-        public IFormatter Formatter { get; private set; }
+        public virtual IFormatter Formatter { get; private set; }
 
         /// <summary>
         ///   Get the packed length of the field, including a length header if necessary for the given value
         /// </summary>
         /// <param name = "value">Value to calculate length for</param>
         /// <returns>Packed length of the field, including length header</returns>
-        public int GetPackedLength(string value)
+        public virtual int GetPackedLength(string value)
         {
             return LengthFormatter.LengthOfLengthIndicator + Formatter.GetPackedLength(value.Length);
         }
@@ -74,7 +74,7 @@ namespace OpenIso8583Net
         /// <param name = "fieldNumber">Field number</param>
         /// <param name = "value">field contents</param>
         /// <returns>formatted string representing the field</returns>
-        public string Display(string prefix, int fieldNumber, string value)
+        public virtual string Display(string prefix, int fieldNumber, string value)
         {
             var sb = new StringBuilder();
             sb.Append(prefix);
@@ -107,7 +107,7 @@ namespace OpenIso8583Net
         /// <param name = "offset">offset in the message to start</param>
         /// <param name = "newOffset">offset at the end of the field for the next field</param>
         /// <returns>valud of the field</returns>
-        public string Unpack(int fieldNumber, byte[] data, int offset, out int newOffset)
+        public virtual string Unpack(int fieldNumber, byte[] data, int offset, out int newOffset)
         {
             var lenOfLenInd = LengthFormatter.LengthOfLengthIndicator;
             var lengthOfField = LengthFormatter.GetLengthOfField(data, offset);
@@ -134,7 +134,7 @@ namespace OpenIso8583Net
         /// <param name = "fieldNumber">number of the field</param>
         /// <param name = "value">Value of the field to pack</param>
         /// <returns>field data packed into a byte[]</returns>
-        public byte[] Pack(int fieldNumber, string value)
+        public virtual byte[] Pack(int fieldNumber, string value)
         {
             if (!LengthFormatter.IsValidLength(Formatter.GetPackedLength(value.Length)))
                 throw new FieldLengthException(fieldNumber, "The field length is not valid");
@@ -156,7 +156,7 @@ namespace OpenIso8583Net
         ///<param name = "packedLength">The packed length of the field.  For BCD fields, this is half the size of the field you want</param>
         ///<param name = "validator">Validator to use on the field</param>
         ///<returns>field descriptor</returns>
-        public static FieldDescriptor AsciiFixed(int packedLength, IFieldValidator validator)
+        public static IFieldDescriptor AsciiFixed(int packedLength, IFieldValidator validator)
         {
             return new FieldDescriptor(new FixedLengthFormatter(packedLength), validator, Formatters.Ascii);
         }
@@ -168,7 +168,7 @@ namespace OpenIso8583Net
         ///<param name = "maxLength">maximum length of the field</param>
         ///<param name = "validator">Validator to use on the field</param>
         ///<returns>field descriptor</returns>
-        public static FieldDescriptor AsciiVar(int lengthIndicator, int maxLength, IFieldValidator validator)
+        public static IFieldDescriptor AsciiVar(int lengthIndicator, int maxLength, IFieldValidator validator)
         {
             return new FieldDescriptor(new VariableLengthFormatter(lengthIndicator, maxLength), validator);
         }
@@ -178,7 +178,7 @@ namespace OpenIso8583Net
         /// </summary>
         /// <param name = "packedLength">length of the field</param>
         /// <returns>field descriptor</returns>
-        public static FieldDescriptor BinaryFixed(int packedLength)
+        public static IFieldDescriptor BinaryFixed(int packedLength)
         {
             return new FieldDescriptor(new FixedLengthFormatter(packedLength), FieldValidators.Hex, Formatters.Binary);
         }

@@ -10,14 +10,14 @@ namespace OpenIso8583Net
         /// <summary>
         ///   Field descriptor
         /// </summary>
-        protected FieldDescriptor _fieldDescriptor;
+        protected IFieldDescriptor _fieldDescriptor;
 
         /// <summary>
         ///   Creates a new instance of the Field class
         /// </summary>
         /// <param name = "fieldNumber">The field number that this object represents</param>
         /// <param name = "fieldDescriptor">Field descriptor</param>
-        public Field(int fieldNumber, FieldDescriptor fieldDescriptor)
+        public Field(int fieldNumber, IFieldDescriptor fieldDescriptor)
         {
             FieldNumber = fieldNumber;
             _fieldDescriptor = fieldDescriptor;
