@@ -182,5 +182,13 @@ namespace OpenIso8583Net
         {
             return new FieldDescriptor(new FixedLengthFormatter(packedLength), FieldValidators.Hex, Formatters.Binary);
         }
+
+        /// <summary>
+        /// Decorate an IFieldDescriptor.Display method with a PCI-DSS PAN mask.
+        /// </summary>
+        public static IFieldDescriptor PanMask(IFieldDescriptor decoratedFieldDescriptor)
+        {
+            return new PanMaskDecorator(decoratedFieldDescriptor);
+        }
     }
 }

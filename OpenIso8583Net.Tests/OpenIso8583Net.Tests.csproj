@@ -38,6 +38,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -65,6 +67,7 @@
     <Compile Include="NetworkHeaders\TestTwoByteHeader.cs" />
     <Compile Include="ProcessingCodeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilsTest.cs" />
     <Compile Include="ValidatorTests\AlphaNumericPrintableValidatorTests.cs" />
     <Compile Include="ValidatorTests\AlphaNumericSpecialValidatorTests.cs" />
     <Compile Include="ValidatorTests\AlphaNumericValidatorTests.cs" />

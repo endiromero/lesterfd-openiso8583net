@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace OpenIso8583Net
 {
@@ -48,6 +49,34 @@ namespace OpenIso8583Net
         {
             string luhn = GetLuhn(pan.Substring(0, pan.Length - 1));
             return luhn == pan.Substring(pan.Length - 1);
+        }
+
+        /// <summary>
+        /// PCI DSS PAN mask. For strings longer than 10 chars masks characters [6..Length-4] 
+        /// by character 'x'; otherwise returns the pan parameter unchanged.
+        /// </summary>
+        /// <param name="pan">a PAN string</param>
+        /// <returns>a masked PAN string</returns>
+        public static string MaskPan(string pan)
+        {
+            if (pan == null)
+                return null;
+
+            const int frontLength = 6;
+            const int endLength = 4;
+            const int unmaskedLength = frontLength + endLength;
+
+            var totalLength = pan.Length;
+
+            if (totalLength <= unmaskedLength)
+                return pan;
+
+            return
+                new StringBuilder()
+                    .Append(pan.Substring(0, frontLength)) // front
+                    .Append(new string('x', totalLength - unmaskedLength))  // mask
+                    .Append(pan.Substring((totalLength - endLength), endLength)) // end
+                    .ToString();
         }
     }
 }
