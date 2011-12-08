@@ -22,9 +22,8 @@
         /// <returns>true if valid, false otherwise</returns>
         public bool IsValid(string value)
         {
-            foreach (var c in value)
+            foreach (int b in value)
             {
-                int b = (byte)c;
                 if (b < 65 || b > 90 && b < 97 || b > 122)
                     return false;
             }

@@ -7,6 +7,8 @@ namespace OpenIso8583Net.FieldValidator
     /// </summary>
     public class Track2FieldValidator : IFieldValidator
     {
+        private static readonly Regex Matcher = new Regex(@"^\d{1,19}[=D]([=D]|\d{4})[=D]?\d*$");
+
         #region IFieldValidator Members
 
         /// <summary>
@@ -29,8 +31,7 @@ namespace OpenIso8583Net.FieldValidator
             // another separator or expiry date, optional
             // another separator, optioinal
             // as many more digits as you want, which may include the service restriction code
-            var matcher = new Regex(@"^\d{1,19}[=D]([=D]|\d{4})[=D]?\d*$");
-            return matcher.IsMatch(value);
+            return Matcher.IsMatch(value);
         }
 
         #endregion
