@@ -100,10 +100,28 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
   <Import Project="$(SolutionDir)Version.proj" />
-  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks" />
   <Target Name="BeforeBuild">
-    <AssemblyInfo CodeLanguage="CS" OutputFile="Properties\AssemblyInfo.cs" AssemblyTitle="OpenIso8583.Net" AssemblyDescription="ISO8583 Message Builder" AssemblyConfiguration="" AssemblyCompany="John Oxley" AssemblyProduct="OpenIso8583.Net" AssemblyCopyright="Copyright © John Oxley 2011" AssemblyTrademark="" AssemblyCulture="" ComVisible="false" Guid="dad698b7-4ada-4f02-8446-12fe960fa2e1" AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" Condition="$(Revision) != '0' " />
-    <MSBuild.ExtensionPack.Xml.XmlFile TaskAction="UpdateElement" File="$(SolutionDir)tools\OpenIso8583Net.nuspec" XPath="/package/metadata/version" InnerText="$(Major).$(Minor).$(Build)" />
-    <Message Text="Version $(Major).$(Minor).$(Build)" />
+	<Message Text="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets" />
+	<AssemblyInfo 
+		CodeLanguage="CS"
+		OutputFile="$(ProjectDir)Properties/AssemblyInfo.cs" 
+		AssemblyTitle="OpenIso8583.Net"
+		AssemblyDescription="ISO8583 Message Builder" 
+		AssemblyConfiguration=""
+		AssemblyCompany="John Oxley" 
+		AssemblyProduct="OpenIso8583.Net"
+		AssemblyCopyright="Copyright © John Oxley 2011" 
+		AssemblyTrademark=""
+		AssemblyCulture=""
+		ComVisible="false"
+		Guid="dad698b7-4ada-4f02-8446-12fe960fa2e1" 
+		AssemblyVersion="$(Major).$(Minor).$(Build).$(Revision)" 
+		AssemblyFileVersion="$(Major).$(Minor).$(Build).$(Revision)" />
+	 <XmlUpdate
+		Prefix="p"
+		Namespace="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd"
+		XmlFileName="$(SolutionDir)tools\OpenIso8583Net.nuspec"
+		XPath="/p:package/p:metadata/p:version"
+		Value="$(Major).$(Minor).$(Build)" />
   </Target>
 </Project>
