@@ -7,6 +7,12 @@ namespace OpenIso8583Net
     /// <summary>
     /// IFieldDescriptor - an Iso Field definition
     /// </summary>
+    /// <remarks>
+    /// If you need concurrency keep in mind that a single IFieldDescriptor instance 
+    /// is used by multiple IField state keeping instances and thus IFieldDescriptors 
+    /// (and all instances they reference) MUST be reentrant, ie. stateless. State 
+    /// (context) should be kept inside IFields and passed into IFieldDescriptors
+    /// </remarks>
     public interface IFieldDescriptor
     {
         /// <summary>
@@ -23,6 +29,11 @@ namespace OpenIso8583Net
         ///   The field formatter describing the field
         /// </summary>
         IFormatter Formatter { get; }
+
+        /// <summary>
+        /// The field adjustment applied during get value and set value
+        /// </summary>
+        Adjuster Adjuster { get; }
 
         /// <summary>
         ///   Get the packed length of the field, including a length header if necessary for the given value

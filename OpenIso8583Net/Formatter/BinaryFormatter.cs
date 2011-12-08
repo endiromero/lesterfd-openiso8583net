@@ -51,7 +51,7 @@ namespace OpenIso8583Net.Formatter
         public static string GetString(byte[] data)
         {
             var hex = BitConverter.ToString(data);
-            return hex.Replace("-", "");
+            return hex.Replace("-", string.Empty);
         }
 
         /// <summary>

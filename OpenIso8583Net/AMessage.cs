@@ -18,24 +18,24 @@ namespace OpenIso8583Net
         /// <summary>
         ///   Bitmap for the ISO message
         /// </summary>
-        protected Bitmap _bitmap;
+        private readonly Bitmap _bitmap;
 
         /// <summary>
         ///   Dictionary containing all the fields in the message
         /// </summary>
-        protected Dictionary<int, IField> _fields;
+        private readonly Dictionary<int, IField> _fields;
 
         /// <summary>
         ///   Template describing the ISO message
         /// </summary>
-        protected Template _template;
+        protected Template Template { get; private set; }
 
         /// <summary>
         ///   Create a new instance of the message
         /// </summary>
-        protected AMessage()
+        protected AMessage(Template template)
         {
-            _template = new Template();
+            Template = template;
             _fields = new Dictionary<int, IField>();
             _bitmap = new Bitmap();
         }
@@ -80,8 +80,7 @@ namespace OpenIso8583Net
         /// <returns>the packing of the message</returns>
         public virtual string DescribePacking()
         {
-            return _template.DescribePacking();
-
+            return Template.DescribePacking();
         }
 
         #region IMessage Members
@@ -170,8 +169,7 @@ namespace OpenIso8583Net
         {
             if (!_bitmap[field] || !_fields.ContainsKey(field))
             {
-                var f = CreateField(field);
-                _fields.Add(field, f);
+                _fields.Add(field, CreateField(field));
                 _bitmap[field] = true;
             }
             return _fields[field];
@@ -202,15 +200,8 @@ namespace OpenIso8583Net
                 ClearField(field);
                 return;
             }
-            if (_bitmap[field])
-                _fields[field].Value = value;
-            else
-            {
-                var f = CreateField(field);
-                f.Value = value;
-                _fields.Add(field, f);
-                _bitmap[field] = true;
-            }
+
+            GetField(field).Value = value;
         }
 
         /// <summary>
@@ -219,7 +210,7 @@ namespace OpenIso8583Net
         /// <returns>Pretty printed string</returns>
         public override string ToString()
         {
-            return ToString("");
+            return ToString(string.Empty);
         }
 
         /// <summary>
@@ -233,7 +224,7 @@ namespace OpenIso8583Net
 
             for (var i = 2; i <= 128; i++)
                 if (_bitmap[i])
-                    sb.Append(ToString(i, prefix) + Environment.NewLine);
+                    sb.AppendLine(ToString(i, prefix));
             return sb.ToString();
         }
 

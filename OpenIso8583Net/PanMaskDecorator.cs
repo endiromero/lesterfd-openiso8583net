@@ -89,5 +89,13 @@
         {
             return _decoratedFieldDescriptor.Pack(fieldNumber, value);
         }
+
+        /// <summary>
+        /// delegated Adjuster
+        /// </summary>
+        public Adjuster Adjuster
+        {
+            get { return _decoratedFieldDescriptor.Adjuster; }
+        }
     }
 }

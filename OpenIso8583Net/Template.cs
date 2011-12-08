@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using OpenIso8583Net.Formatter;
 
@@ -30,13 +29,12 @@ namespace OpenIso8583Net
         public string DescribePacking()
         {
             var sb = new StringBuilder();
+
             foreach (var kvp in this)
             {
                 var field = kvp.Key;
                 var descriptor = kvp.Value;
-                var display = descriptor.Display("", field, null);
-                sb.Append(display);
-                sb.Append(Environment.NewLine);
+                sb.AppendLine(descriptor.Display(string.Empty, field, null));
             }
 
             return sb.ToString();

@@ -72,7 +72,7 @@ namespace OpenIso8583Net
                 return pan;
 
             return
-                new StringBuilder()
+                new StringBuilder(totalLength, totalLength)
                     .Append(pan.Substring(0, frontLength)) // front
                     .Append(new string('x', totalLength - unmaskedLength))  // mask
                     .Append(pan.Substring((totalLength - endLength), endLength)) // end

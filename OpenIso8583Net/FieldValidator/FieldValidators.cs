@@ -1,12 +1,12 @@
 ﻿namespace OpenIso8583Net.FieldValidator
 {
     /// <summary>
-    ///   Static class returning the various field formatters
+    ///   Static class returning the various field validators
     /// </summary>
     public static class FieldValidators
     {
         /// <summary>
-        ///   Get an Alpha formatter
+        ///   Get an Alpha validator
         /// </summary>
         public static IFieldValidator A
         {
@@ -14,7 +14,7 @@
         }
 
         /// <summary>
-        ///   Get an Alpha formatter
+        ///   Get an Alpha validator
         /// </summary>
         public static IFieldValidator Alpha
         {
@@ -22,7 +22,7 @@
         }
 
         /// <summary>
-        ///   Get an Alphanumeric formatter
+        ///   Get an AlphaNumeric field validator
         /// </summary>
         public static IFieldValidator An
         {
@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        ///   Get an Alphanumeric formatter
+        ///   Get an AlphaNumericFieldValidator
         /// </summary>
         public static IFieldValidator AlphaNumeric
         {
@@ -38,7 +38,23 @@
         }
 
         /// <summary>
-        ///   Get an Alphanumeric and printable chars formatter
+        ///   Get an AlphaNumericAndSpace field validator
+        /// </summary>
+        public static IFieldValidator Ansp
+        {
+            get { return AlphaNumericAndSpace; }
+        }
+
+        /// <summary>
+        ///   Get an AlphaNumericAndSpaceFieldValidator
+        /// </summary>
+        public static IFieldValidator AlphaNumericAndSpace
+        {
+            get { return new AlphaNumericAndSpaceFieldValidator(); }
+        }
+
+        /// <summary>
+        ///   Get an Alphanumeric and printable chars validator
         /// </summary>
         public static IFieldValidator Anp
         {
@@ -46,7 +62,7 @@
         }
 
         /// <summary>
-        ///   Get an Alphanumeric and printable chars formatter
+        ///   Get an Alphanumeric and printable chars validator
         /// </summary>
         public static IFieldValidator AlphaNumericPrintable
         {
@@ -54,7 +70,7 @@
         }
 
         /// <summary>
-        ///   Get an Alphanumeric and special chars formatter
+        ///   Get an Alphanumeric and special chars validator
         /// </summary>
         public static IFieldValidator Ans
         {
@@ -62,7 +78,7 @@
         }
 
         /// <summary>
-        ///   Get an Alphanumeric and special chars formatter
+        ///   Get an Alphanumeric and special chars validator
         /// </summary>
         public static IFieldValidator AlphaNumericSpecial
         {
@@ -70,7 +86,7 @@
         }
 
         /// <summary>
-        ///   Gets a formatter for hex data
+        ///   Gets a validator for hex data
         /// </summary>
         public static IFieldValidator Hex
         {
@@ -78,7 +94,7 @@
         }
 
         /// <summary>
-        ///   Gets a formatter that allows anything
+        ///   Gets a validator that allows anything
         /// </summary>
         public static IFieldValidator None
         {
@@ -86,7 +102,7 @@
         }
 
         /// <summary>
-        ///   Get a Numeric field formatter
+        ///   Get a Numeric field validator
         /// </summary>
         public static IFieldValidator N
         {
@@ -94,7 +110,7 @@
         }
 
         /// <summary>
-        ///   Get a Numeric field formatter
+        ///   Get a Numeric field validator
         /// </summary>
         public static IFieldValidator Numeric
         {
@@ -102,7 +118,7 @@
         }
 
         /// <summary>
-        ///   Get a field formatter to validate track 2 data
+        ///   Get a field validator to validate track 2 data
         /// </summary>
         public static IFieldValidator Track2
         {
@@ -110,7 +126,7 @@
         }
 
         /// <summary>
-        ///   Get a formatter for ISO8583:87 amount format (x+n8)
+        ///   Get a validator for ISO8583:87 amount format (x+n8)
         /// </summary>
         /// <remarks>
         ///   For example x+n8 valid would be C00000000 or D00000000

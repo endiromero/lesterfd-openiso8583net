@@ -25,10 +25,22 @@ namespace OpenIso8583Net
 
         #region IField Members
 
+        private string _value;
         /// <summary>
         ///   The Value contained in the field
         /// </summary>
-        public string Value { get; set; }
+        /// adjustment is skipped if there is no Adjuster
+        public string Value 
+        { 
+            get 
+            { 
+                return _fieldDescriptor.Adjuster == null ? _value : _fieldDescriptor.Adjuster.Get(_value); 
+            }
+            set 
+            {
+                _value = _fieldDescriptor.Adjuster == null ? value : _fieldDescriptor.Adjuster.Set(value);
+            }
+        }
 
         /// <summary>
         ///   Gets the field number that this field representss
@@ -49,7 +61,7 @@ namespace OpenIso8583Net
         /// <returns>String representation of the field</returns>
         public override string ToString()
         {
-            return ToString("");
+            return ToString(string.Empty);
         }
 
         /// <summary>
@@ -94,7 +106,7 @@ namespace OpenIso8583Net
         ///<param name = "packedLength">The packed length of the field.  For BCD fields, this is half the size of the field you want</param>
         ///<param name = "validator">Validator to use on the field</param>
         ///<returns>field</returns>
-        public static Field AsciiFixed(int fieldNumber, int packedLength, IFieldValidator validator)
+        public static IField AsciiFixed(int fieldNumber, int packedLength, IFieldValidator validator)
         {
             return new Field(fieldNumber, FieldDescriptor.AsciiFixed(packedLength, validator));
         }
@@ -107,7 +119,7 @@ namespace OpenIso8583Net
         /// <param name = "maxLength">maximum length of field</param>
         /// <param name = "validator">validator to use on the field</param>
         /// <returns>field</returns>
-        public static Field AsciiVar(int fieldNumber, int lengthIndicator, int maxLength, IFieldValidator validator)
+        public static IField AsciiVar(int fieldNumber, int lengthIndicator, int maxLength, IFieldValidator validator)
         {
             return new Field(fieldNumber, FieldDescriptor.AsciiVar(lengthIndicator, maxLength, validator));
         }
@@ -118,7 +130,7 @@ namespace OpenIso8583Net
         /// <param name = "fieldNumber">field number</param>
         /// <param name = "packedLength">length of the field</param>
         /// <returns>field</returns>
-        public static Field BinFixed(int fieldNumber, int packedLength)
+        public static IField BinFixed(int fieldNumber, int packedLength)
         {
             return new Field(fieldNumber, FieldDescriptor.BinaryFixed(packedLength));
         }

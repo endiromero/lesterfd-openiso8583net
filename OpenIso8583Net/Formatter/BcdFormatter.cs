@@ -41,7 +41,7 @@ namespace OpenIso8583Net.Formatter
         /// <returns>value to return</returns>
         public string GetString(byte[] data)
         {
-            return BitConverter.ToString(data).Replace("-", "");
+            return BitConverter.ToString(data).Replace("-", string.Empty);
         }
 
         /// <summary>
