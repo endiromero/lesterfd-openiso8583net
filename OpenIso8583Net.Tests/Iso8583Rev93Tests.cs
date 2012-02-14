@@ -1,13 +1,36 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Iso8583Rev93Tests.cs" company="John Oxley">
+//   2012
+// </copyright>
+// <summary>
+//   The iso 8583 rev 93 tests.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace OpenIso8583Net.Tests
 {
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    /// <summary>
+    /// The ISO 8583 rev 93 tests.
+    /// </summary>
     [TestClass]
     public class Iso8583Rev93Tests
     {
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets TestContext.
+        /// </summary>
         public TestContext TestContext { get; set; }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The test message pack length.
+        /// </summary>
         [TestMethod]
         public void TestMessagePackLength()
         {
@@ -21,5 +44,7 @@ namespace OpenIso8583Net.Tests
 
             Assert.AreEqual(57, actual);
         }
+
+        #endregion
     }
 }

@@ -1,87 +1,54 @@
-﻿using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenIso8583Net.Exceptions;
-using OpenIso8583Net.FieldValidator;
-using OpenIso8583Net.LengthFormatters;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="VariableFieldTests.cs" company="John Oxley">
+//   2012
+// </copyright>
+// <summary>
+//   Summary description for VariableFieldTests
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace OpenIso8583Net.Tests
 {
+    using System.Text;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using OpenIso8583Net.Exceptions;
+    using OpenIso8583Net.FieldValidator;
+    using OpenIso8583Net.Formatter;
+    using OpenIso8583Net.LengthFormatters;
+
     /// <summary>
-    ///   Summary description for VariableFieldTests
+    /// Variable Field Tests
     /// </summary>
     [TestClass]
     public class VariableFieldTests
     {
-        ///<summary>
-        ///  Gets or sets the test context which provides
-        ///  information about and functionality for the current test run.
-        ///</summary>
+        #region Public Properties
+
+        /// <summary>
+        ///  Gets or sets the test context which provides information about and functionality for the current test run.
+        /// </summary>
         public TestContext TestContext { get; set; }
 
-        [TestMethod]
-        public void TestVariableFieldUnpack()
-        {
-            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 20), FieldValidators.Ans, Formatter.Formatters.Ascii));
-            var msg = Encoding.ASCII.GetBytes("xxxxx17Hello dear bobbityyyyyyy");
+        #endregion
 
-            var offset = field.Unpack(msg, 5);
-            Assert.AreEqual(24, offset, "Offset expected to be 24");
-            Assert.AreEqual("Hello dear bobbit", field.Value, "Expected value 'Hello dear bobbit'");
-        }
+        #region Public Methods and Operators
 
+        /// <summary>
+        /// The test pan field.
+        /// </summary>
         [TestMethod]
-        public void TestPanField()
+        public void PackedLength()
         {
             var field = Field.AsciiVar(2, 2, 19, FieldValidators.N);
             field.Value = "58889212344567886";
             Assert.AreEqual(19, field.PackedLength);
-
         }
 
-        [TestMethod]
-        public void TestVariableFieldPack()
-        {
-            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 20), FieldValidators.Ans, Formatter.Formatters.Ascii));
-            field.Value = "Hello dear bobbit";
-            const string expected = "17Hello dear bobbit";
-
-            var msg = field.ToMsg();
-            var actual = Encoding.ASCII.GetString(msg);
-
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        public void TestVariableFieldTooLongPack()
-        {
-            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 16), FieldValidators.Ans));
-            field.Value = "Hello dear bobbit";
-
-            try
-            {
-                field.ToMsg();
-                Assert.Fail("Expecting FieldLengthException");
-            }
-            catch (FieldLengthException)
-            {
-            }
-        }
-
-        [TestMethod]
-        public void TestVariableFieldTooLongUnpack()
-        {
-            var msg = Encoding.ASCII.GetBytes("05hello");
-            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 4), FieldValidators.Ans));
-            try
-            {
-                field.Unpack(msg, 0);
-                Assert.Fail("Expected FieldLengthException");
-            }
-            catch (FieldLengthException)
-            {
-            }
-        }
-
+        /// <summary>
+        /// The test variable field implements validator pack.
+        /// </summary>
         [TestMethod]
         public void TestVariableFieldImplementsValidatorPack()
         {
@@ -100,6 +67,9 @@ namespace OpenIso8583Net.Tests
             }
         }
 
+        /// <summary>
+        /// The test variable field implements validator unpack.
+        /// </summary>
         [TestMethod]
         public void TestVariableFieldImplementsValidatorUnpack()
         {
@@ -114,5 +84,76 @@ namespace OpenIso8583Net.Tests
             {
             }
         }
+
+        /// <summary>
+        /// The test variable field pack.
+        /// </summary>
+        [TestMethod]
+        public void TestVariableFieldPack()
+        {
+            var field = new Field(
+                2, new FieldDescriptor(new VariableLengthFormatter(2, 20), FieldValidators.Ans, Formatters.Ascii));
+            field.Value = "Hello dear bobbit";
+            const string expected = "17Hello dear bobbit";
+
+            var msg = field.ToMsg();
+            var actual = Encoding.ASCII.GetString(msg);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        /// <summary>
+        /// The test variable field too long pack.
+        /// </summary>
+        [TestMethod]
+        public void TestVariableFieldTooLongPack()
+        {
+            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 16), FieldValidators.Ans));
+            field.Value = "Hello dear bobbit";
+
+            try
+            {
+                field.ToMsg();
+                Assert.Fail("Expecting FieldLengthException");
+            }
+            catch (FieldLengthException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// The test variable field too long unpack.
+        /// </summary>
+        [TestMethod]
+        public void TestVariableFieldTooLongUnpack()
+        {
+            var msg = Encoding.ASCII.GetBytes("05hello");
+            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 4), FieldValidators.Ans));
+            try
+            {
+                field.Unpack(msg, 0);
+                Assert.Fail("Expected FieldLengthException");
+            }
+            catch (FieldLengthException)
+            {
+            }
+        }
+
+        /// <summary>
+        /// The test variable field unpack.
+        /// </summary>
+        [TestMethod]
+        public void TestVariableFieldUnpack()
+        {
+            var field = new Field(
+                2, new FieldDescriptor(new VariableLengthFormatter(2, 20), FieldValidators.Ans, Formatters.Ascii));
+            var msg = Encoding.ASCII.GetBytes("xxxxx17Hello dear bobbityyyyyyy");
+
+            var offset = field.Unpack(msg, 5);
+            Assert.AreEqual(24, offset, "Offset expected to be 24");
+            Assert.AreEqual("Hello dear bobbit", field.Value, "Expected value 'Hello dear bobbit'");
+        }
+
+        #endregion
     }
 }
