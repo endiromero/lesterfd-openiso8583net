@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\OpenIso8583Net.XML</DocumentationFile>
     <PostBuildEvent>
-		nuget pack -BasePath "$(SolutionDir)OpenIso8583Net" -OutputDirector "$(SolutionDir)OpenIso8583Net\bin\Release" "$(SolutionDir)tools\OpenIso8583Net.nuspec"
+		nuget pack -BasePath "$(SolutionDir)OpenIso8583Net" -OutputDirectory "$(SolutionDir)OpenIso8583Net\bin\Release" "$(SolutionDir)tools\OpenIso8583Net.nuspec"
     </PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
