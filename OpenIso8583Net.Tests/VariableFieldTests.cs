@@ -94,12 +94,12 @@ namespace OpenIso8583Net.Tests
             var field = new Field(
                 2, new FieldDescriptor(new VariableLengthFormatter(2, 20), FieldValidators.Ans, Formatters.Ascii));
             field.Value = "Hello dear bobbit";
-            const string expected = "17Hello dear bobbit";
+            const string Expected = "17Hello dear bobbit";
 
             var msg = field.ToMsg();
             var actual = Encoding.ASCII.GetString(msg);
 
-            Assert.AreEqual(expected, actual);
+            Assert.AreEqual(Expected, actual);
         }
 
         /// <summary>
