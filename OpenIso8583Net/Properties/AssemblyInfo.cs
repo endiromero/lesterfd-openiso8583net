@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © John Oxley 2011")]
 [assembly: ComVisible(false)]
 [assembly: Guid("dad698b7-4ada-4f02-8446-12fe960fa2e1")]
-[assembly: AssemblyVersion("0.4.1.0")]
-[assembly: AssemblyFileVersion("0.4.1.0")]
+[assembly: AssemblyVersion("0.5.0.0")]
+[assembly: AssemblyFileVersion("0.5.0.0")]
 
 
