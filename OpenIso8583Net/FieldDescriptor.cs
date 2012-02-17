@@ -310,13 +310,13 @@ namespace OpenIso8583Net
 
             return
                 new StringBuilder().AppendFormat(
-                    "{0}[{1,-8} {2,-4} {3,6} {4:d4}] {5:d3} {6}", 
-                    prefix, 
-                    this.LengthFormatter.Description, 
-                    this.Validator.Description, 
-                    this.LengthFormatter.MaxLength, 
-                    this.Formatter.GetPackedLength(value == null ? 0 : value.Length), 
-                    fieldNumber, 
+                    "{0}[{1,-8} {2,-4} {3,6} {4:d4}] {5:d3} {6}",
+                    prefix,
+                    this.LengthFormatter.Description,
+                    this.Validator.Description,
+                    this.LengthFormatter.MaxLength,
+                    this.Formatter.GetPackedLength(value == null ? 0 : value.Length),
+                    fieldNumber,
                     fieldValue).ToString();
         }
 
@@ -388,7 +388,8 @@ namespace OpenIso8583Net
         public virtual string Unpack(int fieldNumber, byte[] data, int offset, out int newOffset)
         {
             var lenOfLenInd = this.LengthFormatter.LengthOfLengthIndicator;
-            var lengthOfField = this.LengthFormatter.GetLengthOfField(data, offset);
+            var unpackedLengthOfField = this.LengthFormatter.GetLengthOfField(data, offset);
+            var lengthOfField = unpackedLengthOfField;
             if (this.Formatter is BcdFormatter)
             {
                 lengthOfField = this.Formatter.GetPackedLength(lengthOfField);
@@ -404,12 +405,20 @@ namespace OpenIso8583Net
             }
 
             var length = value.Length;
-            if (this.Formatter is BinaryFormatter)
+
+            if ((this.Formatter is BinaryFormatter) || (this.Formatter is BcdFormatter))
             {
                 length = this.Formatter.GetPackedLength(length);
+
+                // This is here because if the length of a BCD or binary field is odd, 
+                // we need to strip the first character off which would've been padding
+                if (unpackedLengthOfField % 2 != 0)
+                {
+                    value = value.Substring(1);
+                }
             }
 
-            if (!this.LengthFormatter.IsValidLength(length))
+            if ((this.LengthFormatter is VariableLengthFormatter) && !this.LengthFormatter.IsValidLength(length))
             {
                 throw new FieldLengthException(fieldNumber, "Field is too long");
             }

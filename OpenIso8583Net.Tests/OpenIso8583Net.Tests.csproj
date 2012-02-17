@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdditionalAmountTest.cs" />
+    <Compile Include="BcdFieldTests.cs" />
     <Compile Include="BcdFixedFieldTest.cs" />
     <Compile Include="BcdFormatterTests.cs" />
     <Compile Include="BcdVariableFieldTests.cs" />

@@ -51,7 +51,8 @@ namespace OpenIso8583Net.Formatter
         /// <returns>Packed length</returns>
         public int GetPackedLength(int unpackedLength)
         {
-            return unpackedLength / 2;
+            double len = unpackedLength;
+            return (int)Math.Ceiling(len / 2);
         }
 
         #endregion
