@@ -48,6 +48,18 @@ namespace OpenIso8583Net.Tests
         }
 
         /// <summary>
+        /// The test packed length odd.
+        /// </summary>
+        [TestMethod]
+        public void TestPackedLengthOdd()
+        {
+            var formatter = new BcdFormatter();
+            Assert.AreEqual(1, formatter.GetPackedLength(1));
+            Assert.AreEqual(2, formatter.GetPackedLength(3));
+            Assert.AreEqual(3, formatter.GetPackedLength(5));
+        }
+
+        /// <summary>
         /// The test unpack.
         /// </summary>
         [TestMethod]
