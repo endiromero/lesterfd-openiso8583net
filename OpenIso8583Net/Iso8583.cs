@@ -201,11 +201,12 @@ namespace OpenIso8583Net
         public override int Unpack(byte[] msg, int startingOffset)
         {
             // get mtid
-            var buffer = new byte[4];
+            var mtidLength = this.Template.MsgTypeFormatter.GetPackedLength(4);
+            var buffer = new byte[mtidLength];
             var offset = startingOffset;
-            Array.Copy(msg, offset, buffer, 0, 4);
+            Array.Copy(msg, offset, buffer, 0, mtidLength);
             this.MessageType = IsoConvert.FromMsgTypeDataToInt(buffer);
-            offset += 4;
+            offset += mtidLength;
             return base.Unpack(msg, offset);
         }
 
