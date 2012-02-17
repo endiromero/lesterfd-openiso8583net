@@ -1,31 +1,60 @@
-﻿using System.Collections.Generic;
-using System.Text;
-using OpenIso8583Net.Formatter;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Template.cs" company="John Oxley">
+//   2012
+// </copyright>
+// <summary>
+//   A Template describing a message
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace OpenIso8583Net
 {
+    using System.Collections.Generic;
+    using System.Text;
+
+    using OpenIso8583Net.Formatter;
+
     /// <summary>
-    ///   A Template describing a message
+    /// A Template describing a message
     /// </summary>
     public class Template : Dictionary<int, IFieldDescriptor>
     {
+        #region Constructors and Destructors
+
         /// <summary>
+        /// Initializes a new instance of the <see cref="Template"/> class. 
         ///   Create a new instance of the Template class
         /// </summary>
         public Template()
         {
-            MsgTypeFormatter = Formatters.Ascii;
+            this.MsgTypeFormatter = Formatters.Ascii;
+            this.BitmapFormatter = Formatters.Binary;
         }
 
+        #endregion
+
+        #region Public Properties
+
         /// <summary>
-        ///   Message type formatter
+        /// Gets or sets the message type formatter
         /// </summary>
         public IFormatter MsgTypeFormatter { get; set; }
 
         /// <summary>
-        ///   Describe the packing format of the template
+        /// Gets or sets the bitmap formatter
         /// </summary>
-        /// <returns>The packing of the template</returns>
+        public IFormatter BitmapFormatter { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// Describe the packing format of the template
+        /// </summary>
+        /// <returns>
+        /// The packing of the template 
+        /// </returns>
         public string DescribePacking()
         {
             var sb = new StringBuilder();
@@ -39,5 +68,7 @@ namespace OpenIso8583Net
 
             return sb.ToString();
         }
+
+        #endregion
     }
 }
