@@ -43,7 +43,7 @@ namespace OpenIso8583Net.Tests
         [TestMethod]
         public void BcdUnpackEvenLengthField()
         {
-            var fd = new FieldDescriptor(new FixedLengthFormatter(3), FieldValidators.N, Formatters.Bcd);
+            var fd = new FieldDescriptor(new FixedLengthFormatter(4), FieldValidators.N, Formatters.Bcd);
             byte[] msg = { 0x01, 0x23 };
             int newOffset;
             var fieldValue = fd.Unpack(2, msg, 0, out newOffset);
