@@ -23,7 +23,6 @@ namespace OpenIso8583Net
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Template"/> class. 
-        ///   Create a new instance of the Template class
         /// </summary>
         public Template()
         {
