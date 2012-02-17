@@ -1,55 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AMessage.cs" company="John Oxley">
+//   2012
+// </copyright>
+// <summary>
+//   Class representing a generic ISO 8583 message
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace OpenIso8583Net
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     /// <summary>
-    ///   Class representing a generic ISO 8583 message
+    /// Class representing a generic ISO 8583 message
     /// </summary>
     /// <remarks>
-    ///   This class has been designed to be overridden and apply to all sorts of Bitmap messages.  As such it
-    ///   does not create any fields itself (rev 87 and rev 93) nor does it have an MTID in it so you can use 
-    ///   it if you need a sub message as a field.  See <see cref = "Iso8583" /> for an 
-    ///   implementation of it
+    /// This class has been designed to be overridden and apply to all sorts of Bitmap messages. As such it does not create any fields itself (rev 87 and rev 93) nor does it have an MTID in it so you can use it if you need a sub message as a field. See <see cref="Iso8583"/> for an implementation of it
     /// </remarks>
     public abstract class AMessage : IMessage
     {
+        #region Constants and Fields
+
         /// <summary>
         ///   Bitmap for the ISO message
         /// </summary>
-        private readonly Bitmap _bitmap;
+        private readonly Bitmap bitmap;
 
         /// <summary>
         ///   Dictionary containing all the fields in the message
         /// </summary>
-        private readonly Dictionary<int, IField> _fields;
+        private readonly Dictionary<int, IField> fields;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
-        ///   Template describing the ISO message
+        /// Initializes a new instance of the <see cref="AMessage"/> class.
         /// </summary>
-        protected Template Template { get; private set; }
-
-        /// <summary>
-        ///   Create a new instance of the message
-        /// </summary>
+        /// <param name="template">
+        /// The template. 
+        /// </param>
         protected AMessage(Template template)
         {
             Template = template;
-            _fields = new Dictionary<int, IField>();
-            _bitmap = new Bitmap();
+            this.fields = new Dictionary<int, IField>();
+            this.bitmap = new Bitmap(template.BitmapFormatter);
         }
 
-        /// <summary>
-        ///   Gets or sets the value of a field
-        /// </summary>
-        /// <param name = "field">Field number to get or set</param>
-        /// <returns>Value of the field or null if not present</returns>
-        public string this[int field]
-        {
-            get { return GetFieldValue(field); }
-            set { SetFieldValue(field, value); }
-        }
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         ///   Gets the packed length of the message
@@ -58,10 +61,15 @@ namespace OpenIso8583Net
         {
             get
             {
-                var length = _bitmap.PackedLength;
+                var length = this.bitmap.PackedLength;
                 for (var i = 2; i <= 128; i++)
-                    if (_bitmap[i])
-                        length += _fields[i].PackedLength;
+                {
+                    if (this.bitmap[i])
+                    {
+                        length += this.fields[i].PackedLength;
+                    }
+                }
+
                 return length;
             }
         }
@@ -71,181 +79,280 @@ namespace OpenIso8583Net
         /// </summary>
         public ProcessingCode ProcessingCode
         {
-            get { return new ProcessingCode(this[3]); }
+            get
+            {
+                return new ProcessingCode(this[3]);
+            }
+        }
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        ///  Gets a template describing the ISO message
+        /// </summary>
+        protected Template Template { get; private set; }
+
+        #endregion
+
+        #region Public Indexers
+
+        /// <summary>
+        ///   Gets or sets the value of a field
+        /// </summary>
+        /// <param name="field"> Field number to get or set </param>
+        /// <returns> Value of the field or null if not present </returns>
+        public string this[int field]
+        {
+            get
+            {
+                return this.GetFieldValue(field);
+            }
+
+            set
+            {
+                this.SetFieldValue(field, value);
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// Clears the field in the message
+        /// </summary>
+        /// <param name="field">
+        /// Field number to clear 
+        /// </param>
+        public void ClearField(int field)
+        {
+            this.bitmap[field] = false;
+            this.fields.Remove(field);
         }
 
         /// <summary>
         /// Describe the packing of the message
         /// </summary>
-        /// <returns>the packing of the message</returns>
+        /// <returns>
+        /// the packing of the message 
+        /// </returns>
         public virtual string DescribePacking()
         {
             return Template.DescribePacking();
         }
 
-        #region IMessage Members
         /// <summary>
-        ///   Gets the message as a byte array ready to send over the network
+        /// Returns if a field is set
         /// </summary>
-        /// <returns>byte[] representing the message</returns>
+        /// <param name="field">
+        /// Field number to retrieve 
+        /// </param>
+        /// <returns>
+        /// true if set, false otherwise 
+        /// </returns>
+        public bool IsFieldSet(int field)
+        {
+            return this.bitmap[field];
+        }
+
+        /// <summary>
+        /// Gets the message as a byte array ready to send over the network
+        /// </summary>
+        /// <returns>
+        /// byte[] representing the message 
+        /// </returns>
         public virtual byte[] ToMsg()
         {
-            var packedLen = PackedLength;
+            var packedLen = this.PackedLength;
             var data = new byte[packedLen];
 
             var offset = 0;
+
             // bitmap
-            var bmap = _bitmap.ToMsg();
-            Array.Copy(bmap, 0, data, offset, _bitmap.PackedLength);
-            offset += _bitmap.PackedLength;
+            var bmap = this.bitmap.ToMsg();
+            Array.Copy(bmap, 0, data, offset, this.bitmap.PackedLength);
+            offset += this.bitmap.PackedLength;
+
             // Fields
             for (var i = 2; i <= 128; i++)
-                if (_bitmap[i])
+            {
+                if (this.bitmap[i])
                 {
-                    var field = _fields[i];
+                    var field = this.fields[i];
                     Array.Copy(field.ToMsg(), 0, data, offset, field.PackedLength);
                     offset += field.PackedLength;
                 }
+            }
 
             return data;
         }
 
         /// <summary>
-        ///   Unpacks the message from a byte array
+        /// Returns the contents of the message as a string
         /// </summary>
-        /// <param name = "msg">message data to unpack</param>
-        /// <param name = "startingOffset">the offset in the array to start</param>
-        /// <returns>the offset in the array representing the start of the next message</returns>
-        public virtual int Unpack(byte[] msg, int startingOffset)
-        {
-            var offset = startingOffset;
-
-            // get bitmap
-            offset = _bitmap.Unpack(msg, offset);
-
-            // get fields
-            for (var i = 2; i <= 128; i++)
-                if (_bitmap[i])
-                    offset = GetField(i).Unpack(msg, offset);
-
-            return offset;
-        }
-
-        #endregion
-
-        /// <summary>
-        ///   Clears the field in the message
-        /// </summary>
-        /// <param name = "field">Field number to clear</param>
-        public void ClearField(int field)
-        {
-            _bitmap[field] = false;
-            _fields.Remove(field);
-        }
-
-        /// <summary>
-        ///   Create a field of the correct type and length
-        /// </summary>
-        /// <param name = "field">Field number to create</param>
-        /// <returns>IField representing the desired field</returns>
-        protected abstract IField CreateField(int field);
-
-        /// <summary>
-        ///   Get a field from the ISO message
-        /// </summary>
-        /// <param name = "field">Field to retrieve</param>
-        /// <returns>Value of the field or null if not present</returns>
-        protected string GetFieldValue(int field)
-        {
-            return _bitmap[field] ? _fields[field].Value : null;
-        }
-
-        /// <summary>
-        ///   Gets a field to work on.  Creates the field if it does not exist
-        /// </summary>
-        /// <param name = "field">Field number to get</param>
-        /// <returns>Field to work on</returns>
-        protected IField GetField(int field)
-        {
-            if (!_bitmap[field] || !_fields.ContainsKey(field))
-            {
-                _fields.Add(field, CreateField(field));
-                _bitmap[field] = true;
-            }
-            return _fields[field];
-        }
-
-        /// <summary>
-        ///   Returns if a field is set
-        /// </summary>
-        /// <param name = "field">Field number to retrieve</param>
-        /// <returns>true if set, false otherwise</returns>
-        public bool IsFieldSet(int field)
-        {
-            return _bitmap[field];
-        }
-
-        /// <summary>
-        ///   Sets a field with the given value in the ISO message.
-        /// </summary>
-        /// <remarks>
-        ///   Don't worry about creating the IField as this method will do so
-        /// </remarks>
-        /// <param name = "field"></param>
-        /// <param name = "value"></param>
-        protected void SetFieldValue(int field, string value)
-        {
-            if (value == null)
-            {
-                ClearField(field);
-                return;
-            }
-
-            GetField(field).Value = value;
-        }
-
-        /// <summary>
-        ///   Returns the contents of the message as a string
-        /// </summary>
-        /// <returns>Pretty printed string</returns>
+        /// <returns>
+        /// Pretty printed string 
+        /// </returns>
         public override string ToString()
         {
             return ToString(string.Empty);
         }
 
         /// <summary>
-        ///   Returns the contents of the message as a string
+        /// Returns the contents of the message as a string
         /// </summary>
-        /// <param name = "prefix">The prefix to apply to each line in the message</param>
-        /// <returns>Pretty printed string</returns>
+        /// <param name="prefix">
+        /// The prefix to apply to each line in the message 
+        /// </param>
+        /// <returns>
+        /// Pretty printed string 
+        /// </returns>
         public virtual string ToString(string prefix)
         {
             var sb = new StringBuilder();
 
             for (var i = 2; i <= 128; i++)
-                if (_bitmap[i])
+            {
+                if (this.bitmap[i])
+                {
                     sb.AppendLine(ToString(i, prefix));
+                }
+            }
+
             return sb.ToString();
         }
 
         /// <summary>
-        ///   Returns the field contents as a string for displaying in traces and the like
+        /// Returns the field contents as a string for displaying in traces and the like
         /// </summary>
-        /// <param name = "field">Field number</param>
-        /// <param name = "prefix">What each line must prepended with the prefix</param>
-        /// <returns>Value of the field nicely formatted</returns>
+        /// <param name="field">
+        /// Field number 
+        /// </param>
+        /// <param name="prefix">
+        /// What each line must prepended with the prefix 
+        /// </param>
+        /// <returns>
+        /// Value of the field nicely formatted 
+        /// </returns>
         public virtual string ToString(int field, string prefix)
         {
-            return _fields[field].ToString(prefix + "   ");
+            return this.fields[field].ToString(prefix + "   ");
         }
 
-        #region Nested type: AccountType
+        /// <summary>
+        /// Unpacks the message from a byte array
+        /// </summary>
+        /// <param name="msg">
+        /// message data to unpack 
+        /// </param>
+        /// <param name="startingOffset">
+        /// the offset in the array to start 
+        /// </param>
+        /// <returns>
+        /// the offset in the array representing the start of the next message 
+        /// </returns>
+        public virtual int Unpack(byte[] msg, int startingOffset)
+        {
+            var offset = startingOffset;
+
+            // get bitmap
+            offset = this.bitmap.Unpack(msg, offset);
+
+            // get fields
+            for (var i = 2; i <= 128; i++)
+            {
+                if (this.bitmap[i])
+                {
+                    offset = this.GetField(i).Unpack(msg, offset);
+                }
+            }
+
+            return offset;
+        }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
-        ///   Account Types
+        /// Create a field of the correct type and length
+        /// </summary>
+        /// <param name="field">
+        /// Field number to create 
+        /// </param>
+        /// <returns>
+        /// IField representing the desired field 
+        /// </returns>
+        protected abstract IField CreateField(int field);
+
+        /// <summary>
+        /// Gets a field to work on. Creates the field if it does not exist
+        /// </summary>
+        /// <param name="field">
+        /// Field number to get 
+        /// </param>
+        /// <returns>
+        /// Field to work on 
+        /// </returns>
+        protected IField GetField(int field)
+        {
+            if (!this.bitmap[field] || !this.fields.ContainsKey(field))
+            {
+                this.fields.Add(field, this.CreateField(field));
+                this.bitmap[field] = true;
+            }
+
+            return this.fields[field];
+        }
+
+        /// <summary>
+        /// Get a field from the ISO message
+        /// </summary>
+        /// <param name="field">
+        /// Field to retrieve 
+        /// </param>
+        /// <returns>
+        /// Value of the field or null if not present 
+        /// </returns>
+        protected string GetFieldValue(int field)
+        {
+            return this.bitmap[field] ? this.fields[field].Value : null;
+        }
+
+        /// <summary>
+        /// Sets a field with the given value in the ISO message.
+        /// </summary>
+        /// <param name="field">
+        /// The field.
+        /// </param>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <remarks>
+        /// Don't worry about creating the IField as this method will do so
+        /// </remarks>
+        protected void SetFieldValue(int field, string value)
+        {
+            if (value == null)
+            {
+                this.ClearField(field);
+                return;
+            }
+
+            this.GetField(field).Value = value;
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Account Types
         /// </summary>
         public static class AccountType
         {
+            #region Constants and Fields
+
             /// <summary>
             ///   Default
             /// </summary>
@@ -280,17 +387,17 @@ namespace OpenIso8583Net
             ///   Electronic purse default
             /// </summary>
             public const string _60_ELECTRONIC_PURSE_DEFAULT = "60";
+
+            #endregion
         }
 
-        #endregion
-
-        #region Nested type: AmountType
-
         /// <summary>
-        ///   Amount Types
+        /// Amount Types
         /// </summary>
         public static class AmountType
         {
+            #region Constants and Fields
+
             /// <summary>
             ///   Ledger Balance
             /// </summary>
@@ -345,8 +452,8 @@ namespace OpenIso8583Net
             ///   Credit Limit
             /// </summary>
             public const string _91_CREDIT_LIMIT = "91";
-        }
 
-        #endregion
+            #endregion
+        }
     }
 }
