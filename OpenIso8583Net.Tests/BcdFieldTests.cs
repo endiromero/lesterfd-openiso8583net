@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BcdFieldTests.cs" company="">
-//   
+// <copyright file="BcdFieldTests.cs" company="John Oxley">
+//   2012
 // </copyright>
 // <summary>
 //   BCD Field Tests
@@ -9,11 +9,6 @@
 
 namespace OpenIso8583Net.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using OpenIso8583Net.FieldValidator;
