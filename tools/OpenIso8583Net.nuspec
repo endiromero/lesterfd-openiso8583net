@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>OpenIso8583.Net</id>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
     <authors>John Oxley</authors>
     <owners>John Oxley</owners>
     <projectUrl>https://code.google.com/p/openiso8583net/</projectUrl>
