@@ -32,7 +32,7 @@ namespace OpenIso8583Net.Tests
         {
             try
             {
-                new FieldDescriptor(new FixedLengthFormatter(8), FieldValidators.None, Formatters.Binary);
+                FieldDescriptor.Create(new FixedLengthFormatter(8), FieldValidators.None, Formatters.Binary);
                 Assert.Fail("Binary formatter must have hex validator");
             }
             catch (FieldDescriptorException)

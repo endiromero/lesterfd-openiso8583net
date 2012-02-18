@@ -42,7 +42,7 @@ namespace OpenIso8583Net.Tests
         public void TestFixedFieldCorrectLengthPack()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
             f.Value = "123456";
             try
             {
@@ -63,7 +63,7 @@ namespace OpenIso8583Net.Tests
             // Going to create a numeric field and assign valid length but invalid data to it
             // We're only testing that it implements the validator.  All validators are checked
             // in the various tests for them
-            var f = new Field(2, new FieldDescriptor(new FixedLengthFormatter(6), FieldValidators.N, Formatters.Ascii));
+            var f = new Field(2, FieldDescriptor.Create(new FixedLengthFormatter(6), FieldValidators.N, Formatters.Ascii));
             f.Value = "12345a";
             try
             {
@@ -83,7 +83,7 @@ namespace OpenIso8583Net.Tests
         {
             // have a look at the comment inside TestFixedFieldImplementsValidatorPack
             var data = Encoding.ASCII.GetBytes("12345a");
-            var f = new Field(2, new FieldDescriptor(new FixedLengthFormatter(6), FieldValidators.N, Formatters.Ascii));
+            var f = new Field(2, FieldDescriptor.Create(new FixedLengthFormatter(6), FieldValidators.N, Formatters.Ascii));
             try
             {
                 f.Unpack(data, 0);
@@ -101,7 +101,7 @@ namespace OpenIso8583Net.Tests
         public void TestFixedFieldPack()
         {
             var field = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
             field.Value = "AAAAAA";
             var expected = Encoding.ASCII.GetBytes("AAAAAA");
 
@@ -125,7 +125,7 @@ namespace OpenIso8583Net.Tests
         public void TestFixedFieldTooLongPack()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
             f.Value = "1234567";
             try
             {
@@ -144,7 +144,7 @@ namespace OpenIso8583Net.Tests
         public void TestFixedFieldTooShortPack()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(6), FieldValidators.Ans, Formatters.Ascii));
             f.Value = "12345";
             try
             {
@@ -163,7 +163,7 @@ namespace OpenIso8583Net.Tests
         public void TestFixedFieldUnpack()
         {
             var field = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(6), FieldValidators.A, Formatters.Ascii));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(6), FieldValidators.A, Formatters.Ascii));
             var msg = new byte[10];
             msg[2] = 65;
             msg[3] = 65;

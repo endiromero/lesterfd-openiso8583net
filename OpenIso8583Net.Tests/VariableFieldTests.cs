@@ -55,7 +55,7 @@ namespace OpenIso8583Net.Tests
             // Going to create a numeric field and assign valid length but invalid data to it
             // We're only testing that it implements the validator.  All validators are checked
             // in the various tests for them
-            var f = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 7), FieldValidators.N));
+            var f = new Field(2, FieldDescriptor.CreateAsciiVar(2, 7, FieldValidators.N));
             f.Value = "12345a";
             try
             {
@@ -74,7 +74,7 @@ namespace OpenIso8583Net.Tests
         public void TestVariableFieldImplementsValidatorUnpack()
         {
             var data = Encoding.ASCII.GetBytes("0612345a");
-            var f = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 7), FieldValidators.N));
+            var f = new Field(2, FieldDescriptor.CreateAsciiVar(2, 7, FieldValidators.N));
             try
             {
                 f.Unpack(data, 0);
@@ -91,8 +91,7 @@ namespace OpenIso8583Net.Tests
         [TestMethod]
         public void TestVariableFieldPack()
         {
-            var field = new Field(
-                2, new FieldDescriptor(new VariableLengthFormatter(2, 20), FieldValidators.Ans, Formatters.Ascii));
+            var field = new Field(2, FieldDescriptor.CreateAsciiVar(2, 20, FieldValidators.Ans));
             field.Value = "Hello dear bobbit";
             const string Expected = "17Hello dear bobbit";
 
@@ -108,7 +107,7 @@ namespace OpenIso8583Net.Tests
         [TestMethod]
         public void TestVariableFieldTooLongPack()
         {
-            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 16), FieldValidators.Ans));
+            var field = new Field(2, FieldDescriptor.CreateAsciiVar(2, 16, FieldValidators.Ans));
             field.Value = "Hello dear bobbit";
 
             try
@@ -128,7 +127,8 @@ namespace OpenIso8583Net.Tests
         public void TestVariableFieldTooLongUnpack()
         {
             var msg = Encoding.ASCII.GetBytes("05hello");
-            var field = new Field(2, new FieldDescriptor(new VariableLengthFormatter(2, 4), FieldValidators.Ans));
+            var field = new Field(2, FieldDescriptor.CreateAsciiVar(2, 4, FieldValidators.Ans));
+
             try
             {
                 field.Unpack(msg, 0);
@@ -145,8 +145,7 @@ namespace OpenIso8583Net.Tests
         [TestMethod]
         public void TestVariableFieldUnpack()
         {
-            var field = new Field(
-                2, new FieldDescriptor(new VariableLengthFormatter(2, 20), FieldValidators.Ans, Formatters.Ascii));
+            var field = new Field(2, FieldDescriptor.CreateAsciiVar(2, 20, FieldValidators.Ans));
             var msg = Encoding.ASCII.GetBytes("xxxxx17Hello dear bobbityyyyyyy");
 
             var offset = field.Unpack(msg, 5);

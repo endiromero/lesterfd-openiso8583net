@@ -40,7 +40,7 @@ namespace OpenIso8583Net.Tests
         public void PackTest()
         {
             var field = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(2), FieldValidators.N, Formatters.Bcd));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(2), FieldValidators.N, Formatters.Bcd));
             field.Value = "0012";
             var actual = field.ToMsg();
             var expected = new byte[] { 0x00, 0x12 };
@@ -54,7 +54,7 @@ namespace OpenIso8583Net.Tests
         public void PackedLengthTest()
         {
             var field = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(4), FieldValidators.N, Formatters.Bcd));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(4), FieldValidators.N, Formatters.Bcd));
             field.Value = "12345678";
             var actual = field.PackedLength;
             Assert.AreEqual(4, actual);
@@ -68,7 +68,7 @@ namespace OpenIso8583Net.Tests
         {
             try
             {
-                new FieldDescriptor(new FixedLengthFormatter(8), FieldValidators.Ans, Formatters.Bcd);
+                FieldDescriptor.Create(new FixedLengthFormatter(8), FieldValidators.Ans, Formatters.Bcd);
                 Assert.Fail("Expected FieldDescriptorException");
             }
             catch (FieldDescriptorException)
@@ -83,7 +83,7 @@ namespace OpenIso8583Net.Tests
         public void UnpackTest()
         {
             var field = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(4), FieldValidators.N, Formatters.Bcd));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(4), FieldValidators.N, Formatters.Bcd));
             var msg = new byte[] { 0x00, 0x12 };
             field.Unpack(msg, 0);
             var actual = field.Value;

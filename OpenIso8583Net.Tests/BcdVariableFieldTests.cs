@@ -29,10 +29,7 @@ namespace OpenIso8583Net.Tests
         [TestMethod]
         public void TestPack()
         {
-            var f = new Field(
-                2, 
-                new FieldDescriptor(
-                    new VariableLengthFormatter(2, 15, Formatters.Bcd), FieldValidators.N, Formatters.Bcd));
+            var f = new Field(2, FieldDescriptor.BcdVar(2, 15, Formatters.Bcd));
             f.Value = "77";
             var actual = f.ToMsg();
             var expected = new byte[2];
@@ -48,8 +45,8 @@ namespace OpenIso8583Net.Tests
         public void Unpack()
         {
             var f = new Field(
-                2, 
-                new FieldDescriptor(
+                2,
+                FieldDescriptor.Create(
                     new VariableLengthFormatter(2, 15, Formatters.Bcd), FieldValidators.N, Formatters.Bcd));
             var msg = new byte[2];
             msg[0] = 0x02;

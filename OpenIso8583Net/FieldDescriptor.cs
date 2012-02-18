@@ -39,8 +39,7 @@ namespace OpenIso8583Net
         /// <param name="adjuster">
         /// The adjuster. 
         /// </param>
-        public FieldDescriptor(
-            ILengthFormatter lengthFormatter, IFieldValidator validator, IFormatter formatter, Adjuster adjuster = null)
+        public FieldDescriptor(ILengthFormatter lengthFormatter, IFieldValidator validator, IFormatter formatter, Adjuster adjuster)
         {
             if (formatter is BinaryFormatter && !(validator is HexFieldValidator))
             {
@@ -56,23 +55,6 @@ namespace OpenIso8583Net
             this.Validator = validator;
             this.Formatter = formatter;
             Adjuster = adjuster;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FieldDescriptor"/> class.
-        /// </summary>
-        /// <param name="lengthFormatter">
-        /// The length formatter.
-        /// </param>
-        /// <param name="validator">
-        /// The validator.
-        /// </param>
-        /// <param name="adjuster">
-        /// The adjuster.
-        /// </param>
-        public FieldDescriptor(ILengthFormatter lengthFormatter, IFieldValidator validator, Adjuster adjuster = null)
-            : this(lengthFormatter, validator, new AsciiFormatter(), adjuster)
-        {
         }
 
         #endregion
@@ -115,7 +97,7 @@ namespace OpenIso8583Net
         public static IFieldDescriptor AsciiAlphaNumeric(int length)
         {
             var setAdjuster = new LambdaAdjuster(setLambda: value => value.PadRight(length, ' '));
-            return new FieldDescriptor(new FixedLengthFormatter(length), FieldValidators.Ansp, setAdjuster);
+            return Create(new FixedLengthFormatter(length), FieldValidators.Ansp, Formatters.Ascii, setAdjuster);
         }
 
         /// <summary>
@@ -130,12 +112,11 @@ namespace OpenIso8583Net
         public static IFieldDescriptor AsciiAmount(int length)
         {
             var setAdjuster = new LambdaAdjuster(setLambda: value => value.PadLeft(length, '0'));
-            return new FieldDescriptor(
-                new FixedLengthFormatter(length), FieldValidators.Rev87AmountValidator, setAdjuster);
+            return Create(new FixedLengthFormatter(length), FieldValidators.Rev87AmountValidator, Formatters.Ascii, setAdjuster);
         }
 
         /// <summary>
-        /// Create and ASCII fixed length field descriptor
+        /// Create an ASCII fixed length field descriptor
         /// </summary>
         /// <param name="packedLength">
         /// The packed length of the field. For BCD fields, this is half the size of the field you want 
@@ -148,8 +129,10 @@ namespace OpenIso8583Net
         /// </returns>
         public static IFieldDescriptor AsciiFixed(int packedLength, IFieldValidator validator)
         {
-            return new FieldDescriptor(new FixedLengthFormatter(packedLength), validator, Formatters.Ascii);
+            return Create(new FixedLengthFormatter(packedLength), validator, Formatters.Ascii);
         }
+
+       
 
         /// <summary>
         /// Create ASCII packed variable length LL alphanumeric field (LL CHAR)
@@ -190,8 +173,7 @@ namespace OpenIso8583Net
         /// </returns>
         public static IFieldDescriptor AsciiLllBinary(int packedLength)
         {
-            return new FieldDescriptor(
-                new VariableLengthFormatter(3, packedLength), FieldValidators.Hex, Formatters.Binary);
+            return Create(new VariableLengthFormatter(3, packedLength), FieldValidators.Hex, Formatters.Binary);
         }
 
         /// <summary>
@@ -234,7 +216,7 @@ namespace OpenIso8583Net
         public static IFieldDescriptor AsciiNumeric(int length)
         {
             var setAdjuster = new LambdaAdjuster(setLambda: value => value.PadLeft(length, '0'));
-            return new FieldDescriptor(new FixedLengthFormatter(length), FieldValidators.N, setAdjuster);
+            return Create(new FixedLengthFormatter(length), FieldValidators.N, Formatters.Ascii, setAdjuster);
         }
 
         /// <summary>
@@ -254,9 +236,9 @@ namespace OpenIso8583Net
         /// </returns>
         public static IFieldDescriptor AsciiVar(int lengthIndicator, int maxLength, IFieldValidator validator)
         {
-            return new FieldDescriptor(new VariableLengthFormatter(lengthIndicator, maxLength), validator);
+            return Create(new VariableLengthFormatter(lengthIndicator, maxLength), validator, Formatters.Ascii);
         }
-
+       
         /// <summary>
         /// Create a binary fixed length field
         /// </summary>
@@ -268,7 +250,62 @@ namespace OpenIso8583Net
         /// </returns>
         public static IFieldDescriptor BinaryFixed(int packedLength)
         {
-            return new FieldDescriptor(new FixedLengthFormatter(packedLength), FieldValidators.Hex, Formatters.Binary);
+            return Create(new FixedLengthFormatter(packedLength), FieldValidators.Hex, Formatters.Binary);
+        }
+
+        /// <summary>
+        /// Create a field descriptor
+        /// </summary>
+        /// <param name="lengthFormatter">
+        /// The length formatter. 
+        /// </param>
+        /// <param name="fieldValidator">
+        /// The field validator. 
+        /// </param>
+        /// <param name="formatter">
+        /// The formatter. 
+        /// </param>
+        /// <param name="adjuster">
+        /// The adjuster. 
+        /// </param>
+        /// <returns>
+        /// A field descriptor 
+        /// </returns>
+        public static IFieldDescriptor Create(ILengthFormatter lengthFormatter, IFieldValidator fieldValidator, IFormatter formatter, Adjuster adjuster)
+        {
+            return new FieldDescriptor(lengthFormatter, fieldValidator, formatter, adjuster);
+        }
+
+        /// <summary>
+        /// Create a Field descriptor.
+        /// </summary>
+        /// <param name="lengthFormatter">
+        /// The length formatter. 
+        /// </param>
+        /// <param name="fieldValidator">
+        /// The field validator. 
+        /// </param>
+        /// <param name="formatter">
+        /// The formatter. 
+        /// </param>
+        /// <returns>
+        /// Field descriptor 
+        /// </returns>
+        public static IFieldDescriptor Create(ILengthFormatter lengthFormatter, IFieldValidator fieldValidator, IFormatter formatter)
+        {
+            return new FieldDescriptor(lengthFormatter, fieldValidator, formatter, null);
+        }
+
+
+
+        public static IFieldDescriptor BcdFixed(int length)
+        {
+            return Create(new FixedLengthFormatter(length), FieldValidators.N, Formatters.Bcd, null);
+        }
+
+        public static IFieldDescriptor BcdVar(int lengthIndicator, int maxLength, IFormatter lengthFormatter)
+        {
+            return Create(new VariableLengthFormatter(lengthIndicator, maxLength, lengthFormatter), FieldValidators.N, Formatters.Bcd, null);
         }
 
         /// <summary>
@@ -278,7 +315,7 @@ namespace OpenIso8583Net
         /// The decorated Field Descriptor. 
         /// </param>
         /// <returns>
-        /// The pan mask.
+        /// The pan mask. 
         /// </returns>
         public static IFieldDescriptor PanMask(IFieldDescriptor decoratedFieldDescriptor)
         {
@@ -304,20 +341,9 @@ namespace OpenIso8583Net
         {
             // always use StringBuffer's Append(string) to concatenate user data
             // Formating methods like string.Format("{0}", data) may print garbage when the data contains format characters
-            var fieldValue = value == null
-                                 ? string.Empty
-                                 : new StringBuilder().Append("[").Append(value).Append("]").ToString();
+            var fieldValue = value == null ? string.Empty : new StringBuilder().Append("[").Append(value).Append("]").ToString();
 
-            return
-                new StringBuilder().AppendFormat(
-                    "{0}[{1,-8} {2,-4} {3,6} {4:d4}] {5:d3} {6}",
-                    prefix,
-                    this.LengthFormatter.Description,
-                    this.Validator.Description,
-                    this.LengthFormatter.MaxLength,
-                    this.Formatter.GetPackedLength(value == null ? 0 : value.Length),
-                    fieldNumber,
-                    fieldValue).ToString();
+            return new StringBuilder().AppendFormat("{0}[{1,-8} {2,-4} {3,6} {4:d4}] {5:d3} {6}", prefix, this.LengthFormatter.Description, this.Validator.Description, this.LengthFormatter.MaxLength, this.Formatter.GetPackedLength(value == null ? 0 : value.Length), fieldNumber, fieldValue).ToString();
         }
 
         /// <summary>

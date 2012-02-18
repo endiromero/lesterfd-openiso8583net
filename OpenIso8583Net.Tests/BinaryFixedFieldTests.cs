@@ -42,7 +42,7 @@ namespace OpenIso8583Net.Tests
         public void TestBinaryFixedFieldCorrectLengthPack()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(3), FieldValidators.Hex, Formatters.Binary));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(3), FieldValidators.Hex, Formatters.Binary));
             f.Value = "123456";
             try
             {
@@ -61,7 +61,7 @@ namespace OpenIso8583Net.Tests
         public void TestBinaryFixedFieldImplementsValidatorPack()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(3), FieldValidators.Hex, Formatters.Binary));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(3), FieldValidators.Hex, Formatters.Binary));
             f.Value = "abcdr5";
             try
             {
@@ -80,7 +80,7 @@ namespace OpenIso8583Net.Tests
         public void TestBinaryFixedFieldPack()
         {
             var field = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(4), FieldValidators.Hex, Formatters.Binary));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(4), FieldValidators.Hex, Formatters.Binary));
             field.Value = "31323334";
             var expected = Encoding.ASCII.GetBytes("1234");
 
@@ -95,7 +95,7 @@ namespace OpenIso8583Net.Tests
         public void TestBinaryFixedFieldPackedLength()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(4), FieldValidators.Hex, Formatters.Binary));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(4), FieldValidators.Hex, Formatters.Binary));
             f.Value = "12345678";
             Assert.AreEqual(4, f.PackedLength);
         }
@@ -107,7 +107,7 @@ namespace OpenIso8583Net.Tests
         public void TestBinaryFixedFieldTooLongPack()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(3), FieldValidators.Hex, Formatters.Binary));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(3), FieldValidators.Hex, Formatters.Binary));
             f.Value = "12345678";
             try
             {
@@ -126,7 +126,7 @@ namespace OpenIso8583Net.Tests
         public void TestBinaryFixedFieldTooShortPack()
         {
             var f = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(4), FieldValidators.Hex, Formatters.Binary));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(4), FieldValidators.Hex, Formatters.Binary));
             f.Value = "12345";
             try
             {
@@ -145,7 +145,7 @@ namespace OpenIso8583Net.Tests
         public void TestBinaryFixedFieldUnpack()
         {
             var field = new Field(
-                2, new FieldDescriptor(new FixedLengthFormatter(2), FieldValidators.Hex, Formatters.Binary));
+                2, FieldDescriptor.Create(new FixedLengthFormatter(2), FieldValidators.Hex, Formatters.Binary));
             var msg = new byte[8];
             msg[0] = 65;
             msg[1] = 65;
