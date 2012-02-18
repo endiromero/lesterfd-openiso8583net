@@ -11,7 +11,6 @@ namespace OpenIso8583Net
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Text;
 
     using OpenIso8583Net.Exceptions;
@@ -110,7 +109,7 @@ namespace OpenIso8583Net
                 return base.PackedLength
                        +
                        this.Template.MsgTypeFormatter.GetBytes(
-                           this.MessageType.ToString(CultureInfo.InvariantCulture).PadLeft(4, '0')).Length;
+                           this.MessageType.ToString().PadLeft(4, '0')).Length;
             }
         }
 
