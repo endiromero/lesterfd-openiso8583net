@@ -133,6 +133,6 @@
     <Zip Files="@(ReleaseFiles)"
          Flatten="true"
          WorkingDirectory="bin\$(Configuration)"
-         ZipFileName="bin\$(Configuration)\OpenIso8583.Net.v$(Major).$(Minor).$(Build).zip" />
+         ZipFileName="bin\$(Configuration)\OpenIso8583.Net.$(Major).$(Minor).$(Build).zip" />
   </Target>
 </Project>
