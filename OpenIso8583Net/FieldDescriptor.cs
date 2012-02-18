@@ -132,8 +132,6 @@ namespace OpenIso8583Net
             return Create(new FixedLengthFormatter(packedLength), validator, Formatters.Ascii);
         }
 
-       
-
         /// <summary>
         /// Create ASCII packed variable length LL alphanumeric field (LL CHAR)
         /// </summary>
@@ -238,7 +236,39 @@ namespace OpenIso8583Net
         {
             return Create(new VariableLengthFormatter(lengthIndicator, maxLength), validator, Formatters.Ascii);
         }
-       
+
+        /// <summary>
+        /// The bcd fixed.
+        /// </summary>
+        /// <param name="length">
+        /// The length. 
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static IFieldDescriptor BcdFixed(int length)
+        {
+            return Create(new FixedLengthFormatter(length), FieldValidators.N, Formatters.Bcd, null);
+        }
+
+        /// <summary>
+        /// The bcd var.
+        /// </summary>
+        /// <param name="lengthIndicator">
+        /// The length indicator. 
+        /// </param>
+        /// <param name="maxLength">
+        /// The max length. 
+        /// </param>
+        /// <param name="lengthFormatter">
+        /// The length formatter. 
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static IFieldDescriptor BcdVar(int lengthIndicator, int maxLength, IFormatter lengthFormatter)
+        {
+            return Create(new VariableLengthFormatter(lengthIndicator, maxLength, lengthFormatter), FieldValidators.N, Formatters.Bcd, null);
+        }
+
         /// <summary>
         /// Create a binary fixed length field
         /// </summary>
@@ -294,18 +324,6 @@ namespace OpenIso8583Net
         public static IFieldDescriptor Create(ILengthFormatter lengthFormatter, IFieldValidator fieldValidator, IFormatter formatter)
         {
             return new FieldDescriptor(lengthFormatter, fieldValidator, formatter, null);
-        }
-
-
-
-        public static IFieldDescriptor BcdFixed(int length)
-        {
-            return Create(new FixedLengthFormatter(length), FieldValidators.N, Formatters.Bcd, null);
-        }
-
-        public static IFieldDescriptor BcdVar(int lengthIndicator, int maxLength, IFormatter lengthFormatter)
-        {
-            return Create(new VariableLengthFormatter(lengthIndicator, maxLength, lengthFormatter), FieldValidators.N, Formatters.Bcd, null);
         }
 
         /// <summary>
